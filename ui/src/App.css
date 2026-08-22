@@ -1,0 +1,433 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;800;900&family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&display=swap');
+
+:root {
+  --bg-dark: #200204;
+  --bg-gradient: linear-gradient(135deg, #180000 0%, #3a0005 100%);
+  --text-primary: #a3a3a3;
+  --text-bright: #ffffff;
+}
+
+body, html {
+  margin: 0;
+  padding: 0;
+  width: 100%;
+  height: 100%;
+  background: var(--bg-gradient);
+  background-color: var(--bg-dark);
+  font-family: 'Inter', sans-serif;
+  overflow: hidden;
+  color: var(--text-primary);
+}
+
+* {
+  box-sizing: border-box;
+}
+
+.app-container {
+  width: 100vw;
+  height: 100vh;
+  position: relative;
+  display: flex;
+  overflow: hidden;
+}
+
+/* =============================================
+   ANIMATED BACKGROUND LAYERS
+   ============================================= */
+
+/* Layer 1: Base radial pulse glow from center */
+.app-container::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background:
+    radial-gradient(ellipse 60% 50% at 50% 50%, rgba(180, 20, 30, 0.12) 0%, transparent 70%),
+    radial-gradient(ellipse 40% 35% at 20% 80%, rgba(120, 10, 20, 0.10) 0%, transparent 60%),
+    radial-gradient(ellipse 40% 35% at 80% 20%, rgba(100, 10, 15, 0.08) 0%, transparent 60%);
+  animation: bg-breathe 8s ease-in-out infinite alternate;
+  pointer-events: none;
+  z-index: 0;
+}
+
+@keyframes bg-breathe {
+  0%   { opacity: 0.6; transform: scale(1); }
+  100% { opacity: 1;   transform: scale(1.06); }
+}
+
+/* Layer 2: Floating ambient orbs */
+.bg-orb {
+  position: fixed;
+  border-radius: 50%;
+  pointer-events: none;
+  filter: blur(80px);
+  z-index: 0;
+}
+
+.bg-orb-1 {
+  width: 500px;
+  height: 500px;
+  background: radial-gradient(circle, rgba(160, 20, 40, 0.18) 0%, transparent 70%);
+  top: -100px;
+  left: -100px;
+  animation: orb-drift-1 18s ease-in-out infinite alternate;
+}
+
+.bg-orb-2 {
+  width: 400px;
+  height: 400px;
+  background: radial-gradient(circle, rgba(100, 10, 25, 0.15) 0%, transparent 70%);
+  bottom: -80px;
+  right: -80px;
+  animation: orb-drift-2 22s ease-in-out infinite alternate;
+}
+
+.bg-orb-3 {
+  width: 300px;
+  height: 300px;
+  background: radial-gradient(circle, rgba(200, 30, 50, 0.10) 0%, transparent 70%);
+  top: 40%;
+  left: 30%;
+  animation: orb-drift-3 15s ease-in-out infinite alternate;
+}
+
+@keyframes orb-drift-1 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(80px, 60px) scale(1.1); }
+  100% { transform: translate(40px, 120px) scale(0.95); }
+}
+
+@keyframes orb-drift-2 {
+  0%   { transform: translate(0, 0) scale(1); }
+  50%  { transform: translate(-60px, -80px) scale(1.15); }
+  100% { transform: translate(-100px, -30px) scale(0.9); }
+}
+
+@keyframes orb-drift-3 {
+  0%   { transform: translate(0, 0) scale(1) rotate(0deg); }
+  50%  { transform: translate(60px, -40px) scale(1.2) rotate(15deg); }
+  100% { transform: translate(-40px, 60px) scale(0.85) rotate(-10deg); }
+}
+
+/* Layer 3: Scanning horizontal line (HUD scanline effect) */
+.bg-scanline {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(255, 100, 120, 0.15) 30%, rgba(255, 180, 180, 0.35) 50%, rgba(255, 100, 120, 0.15) 70%, transparent 100%);
+  pointer-events: none;
+  z-index: 1;
+  animation: scanline-sweep 10s linear infinite;
+  box-shadow: 0 0 8px rgba(255, 100, 120, 0.2);
+}
+
+@keyframes scanline-sweep {
+  0%   { top: -2px; opacity: 0; }
+  5%   { opacity: 1; }
+  95%  { opacity: 1; }
+  100% { top: 100vh; opacity: 0; }
+}
+
+/* Layer 4: Animated corner leaf overlays */
+.leaf-top-left {
+  position: absolute;
+  top: -20px;
+  left: -20px;
+  width: 350px;
+  height: 350px;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="%234A1015" d="M10,10 Q40,0 60,30 T90,80 Q50,100 30,70 T10,10 Z" opacity="0.6"/><path fill="%236B1A22" d="M0,40 Q20,20 40,50 T70,90 Q40,100 20,70 T0,40 Z" opacity="0.4"/></svg>');
+  background-size: cover;
+  pointer-events: none;
+  z-index: 1;
+  animation: leaf-sway 10s ease-in-out infinite alternate;
+  transform-origin: top left;
+}
+
+.leaf-bottom-right {
+  position: absolute;
+  bottom: -20px;
+  right: -20px;
+  width: 400px;
+  height: 400px;
+  background-image: url('data:image/svg+xml;utf8,<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><path fill="%236B1A22" d="M80,90 Q90,50 60,30 T10,10 Q20,50 50,70 T80,90 Z" opacity="0.4"/><path fill="%234A1015" d="M90,70 Q100,40 70,20 T30,0 Q30,40 60,60 T90,70 Z" opacity="0.5"/></svg>');
+  background-size: cover;
+  pointer-events: none;
+  z-index: 1;
+  animation: leaf-sway-reverse 12s ease-in-out infinite alternate;
+  transform-origin: bottom right;
+}
+
+@keyframes leaf-sway {
+  0%   { transform: scale(1) rotate(-2deg); opacity: 0.85; }
+  50%  { transform: scale(1.06) rotate(1deg); opacity: 1; }
+  100% { transform: scale(1.02) rotate(-1deg); opacity: 0.9; }
+}
+
+@keyframes leaf-sway-reverse {
+  0%   { transform: scale(1) rotate(2deg); opacity: 0.8; }
+  50%  { transform: scale(1.08) rotate(-1.5deg); opacity: 1; }
+  100% { transform: scale(1.03) rotate(1deg); opacity: 0.88; }
+}
+
+/* =============================================
+   STATIC TEXT & HUD CORNER ELEMENTS
+   ============================================= */
+
+.static-text {
+  position: fixed;
+  font-size: 0.8rem;
+  font-weight: 800;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffb3b3;
+  opacity: 0.8;
+  z-index: 10;
+  animation: float-static 6s ease-in-out infinite alternate;
+}
+.static-text strong {
+  color: #ffb3b3;
+}
+
+@keyframes float-static {
+  0%   { transform: translateY(0px); opacity: 0.7; }
+  100% { transform: translateY(-3px); opacity: 0.9; }
+}
+
+/* Developer tag — bottom-left */
+.developer-tag {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+  line-height: 1;
+}
+
+.dev-label {
+  font-size: 0.55rem;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  color: rgba(255, 179, 179, 0.45);
+  text-transform: uppercase;
+}
+
+.dev-name {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  background: linear-gradient(90deg, #ff6b6b 0%, #ffb3b3 50%, #ff4757 100%);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  filter: drop-shadow(0 0 8px rgba(255, 100, 100, 0.5));
+  animation: name-glow 4s ease-in-out infinite alternate;
+}
+
+@keyframes name-glow {
+  0%   { filter: drop-shadow(0 0 4px rgba(255, 100, 100, 0.3)); }
+  100% { filter: drop-shadow(0 0 14px rgba(255, 130, 130, 0.7)); }
+}
+
+.interface-layout {
+  display: flex;
+  width: 100%;
+  height: 100%;
+  padding: 80px 120px;
+  position: relative;
+  z-index: 5;
+  animation: boot-pop 0.8s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+  animation-delay: 0.6s;
+  opacity: 0;
+}
+
+@keyframes boot-pop {
+  0% {
+    opacity: 0;
+    transform: scale(0.8) translateY(30px);
+    filter: blur(10px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+    filter: blur(0px);
+  }
+}
+
+/* Base style for elements that need to pop in after boot */
+.boot-animate {
+  opacity: 0;
+  animation: boot-pop 0.7s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
+}
+
+/* Corner positions — each element anchored to its own corner */
+.corner-top-left    { top: 30px;    left: 40px;  animation-delay: 0.1s; }
+.corner-top-right   { top: 30px;    right: 40px; animation-delay: 0.2s; }
+.corner-bottom-left { bottom: 30px; left: 40px;  animation-delay: 0.3s; }
+.corner-bottom-right{ bottom: 30px; right: 40px; animation-delay: 0.4s; }
+
+/* Funky designer clock styles */
+.hud-clock-time {
+  font-family: 'Orbitron', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  color: #ff6b6b;
+  text-shadow: 0 0 10px rgba(255, 100, 100, 0.7), 0 0 25px rgba(255, 100, 100, 0.3);
+  animation: clock-glow 3s ease-in-out infinite alternate;
+}
+
+.hud-clock-label {
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.5rem;
+  letter-spacing: 0.3em;
+  color: rgba(255, 179, 179, 0.5);
+  margin-top: 2px;
+}
+
+@keyframes clock-glow {
+  0%   { text-shadow: 0 0 8px rgba(255, 100, 100, 0.5), 0 0 20px rgba(255, 100, 100, 0.2); }
+  100% { text-shadow: 0 0 16px rgba(255, 120, 120, 0.9), 0 0 40px rgba(255, 100, 100, 0.5); }
+}
+
+/* =============================================
+   INLINE INTERRUPT BUTTON
+   ============================================= */
+.interrupt-inline-btn {
+  position: absolute;
+  right: 15px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(255, 71, 87, 0.2);
+  border: 1px solid rgba(255, 71, 87, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  backdrop-filter: blur(5px);
+  transition: all 0.2s ease;
+  animation: pulse-danger-inline 2s infinite alternate;
+}
+
+.interrupt-inline-btn:hover {
+  background: rgba(255, 71, 87, 0.4);
+  transform: translateY(-50%) scale(1.1);
+}
+
+.interrupt-inline-btn:active {
+  transform: translateY(-50%) scale(0.9);
+}
+
+.interrupt-inline-btn .power-icon {
+  width: 14px;
+  height: 14px;
+  color: #ff4757;
+  filter: drop-shadow(0 0 5px rgba(255, 71, 87, 0.8));
+  transition: color 0.3s ease;
+}
+
+.interrupt-inline-btn:hover .power-icon {
+  color: #fff;
+}
+
+@keyframes pulse-danger-inline {
+  0% { box-shadow: 0 0 5px rgba(255, 71, 87, 0.2); }
+  100% { box-shadow: 0 0 15px rgba(255, 71, 87, 0.5); }
+}
+
+/* =============================================
+   MANUAL COMMAND INPUT BAR
+   ============================================= */
+.command-input-wrapper {
+  position: fixed;
+  bottom: 15px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 500px;
+  max-width: 90vw;
+  z-index: 50;
+  display: flex;
+  align-items: center;
+  opacity: 0;
+  animation: boot-pop-smooth 1s cubic-bezier(0.2, 0.8, 0.2, 1) forwards;
+  animation-delay: 1.2s; /* appears shortly after boot */
+}
+
+@keyframes boot-pop-smooth {
+  0% { transform: translate(-50%, 30px); opacity: 0; }
+  100% { transform: translate(-50%, 0); opacity: 1; }
+}
+
+
+
+.command-input {
+  width: 100%;
+  padding: 15px 25px;
+  border-radius: 30px;
+  background: rgba(10, 0, 2, 0.4);
+  backdrop-filter: blur(15px) saturate(180%);
+  -webkit-backdrop-filter: blur(15px) saturate(180%);
+  border: 1px solid rgba(255, 100, 100, 0.25);
+  color: #fff;
+  font-family: 'Share Tech Mono', monospace;
+  font-size: 0.9rem;
+  letter-spacing: 0.05em;
+  text-align: center;
+  outline: none;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4), inset 0 0 10px rgba(255, 100, 100, 0.05);
+  transition: all 0.4s cubic-bezier(0.25, 1, 0.5, 1);
+}
+
+.command-input:hover {
+  border-color: rgba(255, 100, 100, 0.4);
+  box-shadow: 0 4px 20px rgba(255, 71, 87, 0.15);
+}
+
+.command-input::placeholder {
+  color: rgba(255, 150, 150, 0.5);
+  font-weight: 300;
+  letter-spacing: 0.1em;
+}
+
+.command-input:focus {
+  background: rgba(20, 5, 10, 0.6);
+  border-color: rgba(255, 100, 100, 0.6);
+  box-shadow: 0 8px 32px rgba(255, 71, 87, 0.2), inset 0 0 15px rgba(255, 100, 100, 0.1);
+  transform: translateY(-2px);
+}
+
+.command-input:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Global Click Shockwave Ripple */
+.click-ripple {
+  position: fixed;
+  border-radius: 50%;
+  border: 2px solid var(--cyan);
+  box-shadow: 0 0 15px var(--cyan), inset 0 0 10px var(--cyan);
+  pointer-events: none;
+  z-index: 10000;
+  transform: translate(-50%, -50%) scale(0);
+  opacity: 1;
+  animation: shockwave 0.5s cubic-bezier(0.1, 0.8, 0.2, 1) forwards;
+}
+
+@keyframes shockwave {
+  0% {
+    width: 0px;
+    height: 0px;
+    opacity: 1;
+    border-width: 4px;
+  }
+  100% {
+    width: 120px;
+    height: 120px;
+    opacity: 0;
+    border-width: 0px;
+  }
+}
+

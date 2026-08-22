@@ -1,0 +1,36 @@
+.visualizer-container {
+  position: fixed;
+  left: 40px;
+  bottom: 60px; /* Sitting right above the "Developed By" text at bottom: 30px */
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 40px;
+  z-index: 20;
+  pointer-events: none;
+}
+
+/* Bar Equalizer */
+.eq-container {
+  width: 300px;
+  height: 80px;
+}
+
+.eq-canvas {
+  width: 100%;
+  height: 100%;
+}
+
+@media (max-width: 1200px) {
+  .visualizer-container {
+    left: 40px;
+    bottom: 40px;
+  }
+}
+
+@media (max-width: 768px) {
+  .eq-container {
+    width: 200px;
+    height: 60px;
+  }
+}

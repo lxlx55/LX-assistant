@@ -1,0 +1,280 @@
+.system-info-widget {
+  width: 170px;
+  
+  /* Ultra-Premium Glassmorphism */
+  background: rgba(15, 5, 5, 0.45);
+  backdrop-filter: blur(32px) saturate(150%);
+  -webkit-backdrop-filter: blur(32px) saturate(150%);
+  border: 1px solid rgba(255, 100, 100, 0.15);
+  border-radius: 12px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.6), inset 0 0 0 1px rgba(255, 255, 255, 0.04);
+  
+  padding: 16px;
+  font-family: 'Rajdhani', sans-serif;
+  color: #fff;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  z-index: 40;
+  position: relative;
+  overflow: hidden;
+  
+  /* Enforce crisp text rendering */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  text-rendering: optimizeLegibility;
+}
+
+/* Subtle accent corners */
+.system-info-widget::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 15px; height: 15px;
+  border-top: 2px solid rgba(255, 100, 100, 0.4);
+  border-left: 2px solid rgba(255, 100, 100, 0.4);
+  border-top-left-radius: 12px;
+}
+
+.system-info-widget::after {
+  content: '';
+  position: absolute;
+  bottom: 0; right: 0;
+  width: 15px; height: 15px;
+  border-bottom: 2px solid rgba(255, 100, 100, 0.4);
+  border-right: 2px solid rgba(255, 100, 100, 0.4);
+  border-bottom-right-radius: 12px;
+}
+
+.hud-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2px;
+  font-size: 0.6rem;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  color: rgba(255, 255, 255, 0.9);
+  letter-spacing: 0.15em;
+  padding-bottom: 2px;
+}
+
+.hud-pulse-dot {
+  width: 5px; height: 5px;
+  background-color: var(--accent-primary);
+  border-radius: 50%;
+  box-shadow: 0 0 6px var(--accent-primary);
+  animation: pulse-glow 2s infinite;
+}
+
+@keyframes pulse-glow {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.3; transform: scale(0.8); }
+}
+
+/* Dividers */
+.hud-divider {
+  height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 100, 100, 0.2), transparent);
+  margin: 2px 0;
+}
+
+.hud-divider-diamond {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+  height: 8px;
+}
+.hud-divider-diamond::before {
+  content: '';
+  position: absolute;
+  width: 100%; height: 1px;
+  background: linear-gradient(90deg, transparent, rgba(255, 100, 100, 0.1), transparent);
+}
+.hud-divider-diamond .diamond {
+  width: 3px; height: 3px;
+  background: rgba(255, 100, 100, 0.6);
+  transform: rotate(45deg);
+  z-index: 1;
+  box-shadow: 0 0 4px rgba(255, 100, 100, 0.5);
+}
+
+/* Clock */
+.hud-clock-section {
+  text-align: center;
+}
+.hud-time {
+  font-size: 1.6rem;
+  font-weight: 300;
+  line-height: 1;
+  text-shadow: 0 0 12px rgba(255, 100, 100, 0.2);
+}
+.hud-seconds {
+  font-size: 0.8rem;
+  opacity: 0.5;
+}
+.hud-date {
+  font-size: 0.65rem;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+  margin-top: 2px;
+}
+
+/* Weather */
+.hud-weather-section {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+}
+.ref-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 8px 16px 6px;
+  border-bottom: 1px solid rgba(255, 100, 100, 0.15);
+  background: rgba(180, 20, 30, 0.08);
+}
+.hud-weather-icon {
+  font-size: 1.3rem;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.2));
+}
+.hud-weather-details {
+  display: flex;
+  flex-direction: column;
+}
+.hud-temp {
+  font-size: 1.1rem;
+  font-weight: 600;
+  line-height: 1;
+}
+.hud-condition {
+  font-size: 0.6rem;
+  letter-spacing: 0.1em;
+  opacity: 0.8;
+  margin-top: 2px;
+  text-transform: uppercase;
+}
+
+/* Location Box */
+.hud-location-box {
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  border-radius: 6px;
+  padding: 6px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 4px;
+  transition: all 0.3s ease;
+}
+.location-pin {
+  font-size: 0.7rem;
+  opacity: 0.8;
+}
+.location-text {
+  font-size: 0.6rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  color: rgba(255, 255, 255, 0.9);
+  text-transform: uppercase;
+}
+
+/* Footer Stats */
+.hud-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 2px 0;
+}
+.hud-stat-box {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+}
+.hud-stat-divider {
+  width: 1px;
+  height: 20px;
+  background: rgba(255, 255, 255, 0.1);
+}
+.stat-label {
+  font-size: 0.55rem;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.1em;
+  opacity: 0.75;
+}
+.stat-value {
+  font-size: 0.8rem;
+  font-weight: 600;
+  margin-top: 2px;
+  text-shadow: 0 0 6px rgba(255, 100, 100, 0.3);
+}
+
+/* Hardware Controls */
+.hud-hardware-controls {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-top: 2px;
+}
+.hud-control-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+.hud-control-label {
+  font-size: 0.65rem;
+  font-weight: 700;
+  font-family: 'Orbitron', sans-serif;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.85);
+}
+
+/* Elegant Switch — High Visibility */
+.hud-switch {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: 18px;
+}
+.hud-switch input { opacity: 0; width: 0; height: 0; }
+
+/* OFF state — clearly dimmed */
+.hud-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0; left: 0; right: 0; bottom: 0;
+  background-color: rgba(255, 255, 255, 0.08);
+  transition: .3s;
+  border-radius: 18px;
+  border: 1.5px solid rgba(255, 255, 255, 0.15);
+}
+.hud-slider:before {
+  position: absolute;
+  content: '';
+  height: 12px; width: 12px;
+  left: 2px; bottom: 2px;
+  background-color: rgba(255, 255, 255, 0.35);
+  transition: .3s;
+  border-radius: 50%;
+}
+
+/* ON state — bright red glow */
+input:checked + .hud-slider {
+  background-color: rgba(255, 80, 80, 0.35);
+  border-color: rgba(255, 100, 100, 0.7);
+  box-shadow: 0 0 8px rgba(255, 80, 80, 0.25);
+}
+input:checked + .hud-slider:before {
+  transform: translateX(18px);
+  background-color: #ff6b6b;
+  box-shadow: 0 0 10px rgba(255, 100, 100, 0.8);
+}
+
+.disabled-box {
+  opacity: 0.3;
+  filter: grayscale(100%);
+}

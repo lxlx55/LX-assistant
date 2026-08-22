@@ -1,0 +1,51 @@
+{
+  "name": "lx",
+  "version": "1.0.0",
+  "type": "module",
+  "description": "LX - Personal AI Assistant",
+  "main": "main/main.js",
+  "scripts": {
+    "start": "concurrently \"npm run start:ui\" \"npm run start:electron\"",
+    "start:ui": "cd ui && npm run dev",
+    "start:electron": "wait-on http://localhost:5173 && electron .",
+    "build:ui": "cd ui && npm run build",
+    "dist": "npm run build:ui && electron-builder --win dir"
+  },
+  "build": {
+    "appId": "com.lx.assistant",
+    "productName": "LX AI Assistant",
+    "npmRebuild": false,
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main/**/*",
+      "core/**/*",
+      "ui/dist/**/*",
+      "package.json",
+      ".env"
+    ],
+    "win": {
+      "target": "dir"
+    }
+  },
+  "keywords": [],
+  "author": "Amritom Borah",
+  "license": "ISC",
+  "devDependencies": {
+    "concurrently": "^10.0.4",
+    "electron": "^43.3.0",
+    "electron-builder": "^26.15.3",
+    "wait-on": "^9.1.0"
+  },
+  "dependencies": {
+    "better-sqlite3": "^13.0.3",
+    "cors": "^2.8.6",
+    "dotenv": "^17.4.2",
+    "express": "^5.2.1",
+    "form-data": "^4.0.6",
+    "msedge-tts": "^2.0.7",
+    "multer": "^2.2.0",
+    "node-fetch": "^3.3.2"
+  }
+}

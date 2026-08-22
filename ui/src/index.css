@@ -1,0 +1,59 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Rajdhani:wght@300;400;500;600;700&display=swap');
+
+:root {
+  --bg-primary: #020812;
+  --bg-secondary: #040f1e;
+  --bg-glass: rgba(0, 20, 50, 0.5);
+  --cyan: #00d4ff;
+  --cyan-dim: rgba(0, 212, 255, 0.35);
+  --blue: #0057e7;
+  --blue-bright: #4d9fff;
+  --glow-cyan: 0 0 15px rgba(0, 212, 255, 0.6), 0 0 30px rgba(0, 212, 255, 0.25);
+  --glow-blue: 0 0 15px rgba(0, 87, 231, 0.5);
+  --text-primary: #cde8ff;
+  --text-secondary: #5a8aaa;
+  --text-dim: #1e4060;
+  --border-color: rgba(0, 212, 255, 0.18);
+  --green: #00ff88;
+  --orange: #ff7b00;
+}
+
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html, body, #root {
+  height: 100%;
+  width: 100%;
+  overflow: hidden;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Rajdhani', sans-serif;
+  font-size: 16px;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  transition: background-color 0.8s cubic-bezier(0.25, 1, 0.5, 1), color 0.8s ease;
+}
+
+::-webkit-scrollbar {
+  width: 3px;
+}
+
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+::-webkit-scrollbar-thumb {
+  background: rgba(0, 212, 255, 0.35);
+  border-radius: 2px;
+}
+
+button {
+  cursor: pointer;
+  font-family: inherit;
+}

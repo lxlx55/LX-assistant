@@ -1,0 +1,165 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>L X - Mic Test</title>
+  <style>
+    body { font-family: 'Segoe UI', sans-serif; background: #0a0f1e; color: #e0e8ff; padding: 40px; }
+    h1 { color: #00d4ff; }
+    .log { background: #111; border: 1px solid #333; padding: 16px; border-radius: 8px; margin: 16px 0; max-height: 400px; overflow-y: auto; font-family: monospace; font-size: 14px; line-height: 1.8; }
+    .ok  { color: #4ade80; }
+    .err { color: #ff6666; }
+    .info { color: #00d4ff; }
+    .warn { color: #fbbf24; }
+    button { background: #00d4ff; color: #000; font-weight: bold; border: none; padding: 12px 28px; border-radius: 6px; cursor: pointer; font-size: 16px; margin: 8px 8px 8px 0; }
+    button:hover { background: #33ddff; }
+    button.stop { background: #ff4444; color: #fff; }
+    #transcript { background: #0d1a3a; border: 2px solid #00d4ff; border-radius: 8px; padding: 20px; margin: 16px 0; min-height: 60px; font-size: 18px; }
+  </style>
+</head>
+<body>
+  <h1>🎤 L X Microphone Diagnostic</h1>
+  <p>This page tests your mic step by step. Open this in <strong>Microsoft Edge</strong>.</p>
+  
+  <button onclick="testMicPermission()">Step 1: Test Mic Permission</button>
+  <button onclick="testSpeechAPI()">Step 2: Test Speech API</button>
+  <button onclick="startListening()">Step 3: Start Listening</button>
+  <button class="stop" onclick="stopListening()">Stop Listening</button>
+  
+  <h3>Live Transcript:</h3>
+  <div id="transcript">Waiting...</div>
+  
+  <h3>Diagnostic Log:</h3>
+  <div class="log" id="log"></div>
+
+  <script>
+    const logEl = document.getElementById('log')
+    const transcriptEl = document.getElementById('transcript')
+    let recognition = null
+
+    function log(msg, type = 'info') {
+      const time = new Date().toLocaleTimeString()
+      logEl.innerHTML += `<div class="${type}">[${time}] ${msg}</div>`
+      logEl.scrollTop = logEl.scrollHeight
+    }
+
+    // Step 1: Test mic permission
+    async function testMicPermission() {
+      log('Testing microphone permission...', 'info')
+      try {
+        const stream = await navigator.mediaDevices.getUserMedia({ audio: true })
+        const tracks = stream.getAudioTracks()
+        log(`✅ Mic permission GRANTED! Found ${tracks.length} audio track(s)`, 'ok')
+        log(`   Track: ${tracks[0]?.label || 'unknown'}`, 'ok')
+        // Stop the stream (we just needed to test permission)
+        stream.getTracks().forEach(t => t.stop())
+      } catch (err) {
+        log(`❌ Mic permission DENIED: ${err.name} - ${err.message}`, 'err')
+        log('   → Click the 🔒 icon in your address bar → Allow microphone', 'warn')
+      }
+    }
+
+    // Step 2: Check if Speech Recognition API exists
+    function testSpeechAPI() {
+      log('Checking Speech Recognition API...', 'info')
+      
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition
+      if (!SR) {
+        log('❌ Speech Recognition NOT available in this browser!', 'err')
+        log('   → Use Microsoft Edge or Google Chrome', 'warn')
+        return
+      }
+      log('✅ SpeechRecognition API is available', 'ok')
+
+      // Check which one
+      if (window.SpeechRecognition) log('   Using: window.SpeechRecognition (standard)', 'info')
+      else log('   Using: window.webkitSpeechRecognition (webkit)', 'info')
+
+      // Try creating an instance
+      try {
+        const test = new SR()
+        log('✅ Can create SpeechRecognition instance', 'ok')
+      } catch (e) {
+        log(`❌ Failed to create instance: ${e.message}`, 'err')
+      }
+    }
+
+    // Step 3: Actually listen
+    function startListening() {
+      const SR = window.SpeechRecognition || window.webkitSpeechRecognition
+      if (!SR) {
+        log('❌ SpeechRecognition not available', 'err')
+        return
+      }
+
+      if (recognition) {
+        try { recognition.stop() } catch(_) {}
+      }
+
+      recognition = new SR()
+      recognition.continuous = false
+      recognition.interimResults = true
+      recognition.lang = 'en-US'
+
+      recognition.onstart = () => {
+        log('🎤 Listening started — SPEAK NOW!', 'ok')
+        transcriptEl.textContent = '🔴 Listening... speak now!'
+        transcriptEl.style.borderColor = '#4ade80'
+      }
+
+      recognition.onresult = (e) => {
+        let final = ''
+        let interim = ''
+        for (let i = 0; i < e.results.length; i++) {
+          const t = e.results[i][0].transcript
+          if (e.results[i].isFinal) final += t
+          else interim += t
+        }
+        const display = final || interim
+        transcriptEl.textContent = display
+        if (final) {
+          log(`✅ HEARD YOU: "${final}"`, 'ok')
+        } else if (interim) {
+          log(`... hearing: "${interim}"`, 'info')
+        }
+      }
+
+      recognition.onerror = (e) => {
+        log(`❌ Error: ${e.error} — ${e.message || 'no details'}`, 'err')
+        if (e.error === 'not-allowed') {
+          log('   → Mic not allowed. Click 🔒 in address bar → Allow mic', 'warn')
+        } else if (e.error === 'no-speech') {
+          log('   → No speech detected. Try speaking louder.', 'warn')
+        } else if (e.error === 'network') {
+          log('   → Network error. Speech recognition needs internet.', 'warn')
+        } else if (e.error === 'aborted') {
+          log('   → Recognition was aborted.', 'warn')
+        }
+      }
+
+      recognition.onend = () => {
+        log('⏹ Listening ended.', 'info')
+        transcriptEl.style.borderColor = '#00d4ff'
+      }
+
+      try {
+        recognition.start()
+        log('Starting recognition...', 'info')
+      } catch (e) {
+        log(`❌ Failed to start: ${e.message}`, 'err')
+      }
+    }
+
+    function stopListening() {
+      if (recognition) {
+        recognition.stop()
+        log('Stopped manually.', 'warn')
+      }
+    }
+
+    // Auto-run diagnostics
+    log('=== L X Mic Diagnostic Tool ===', 'info')
+    log('Browser: ' + navigator.userAgent.split(' ').pop(), 'info')
+    log('Click each button in order to test your microphone.', 'info')
+  </script>
+</body>
+</html>
